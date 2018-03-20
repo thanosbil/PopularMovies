@@ -6,7 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.example.thanos.popularmovies.utilities.MoviesAdapter;
+import com.example.thanos.popularmovies.MoviesAdapter;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.MoviesAdapterOnClickHandler{
     private RecyclerView mRecyclerView;

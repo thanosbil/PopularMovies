@@ -1,13 +1,13 @@
-package com.example.thanos.popularmovies.utilities;
+package com.example.thanos.popularmovies;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.thanos.popularmovies.R;
 
 /**
  * Created by Thanos on 3/14/2018.
@@ -39,6 +39,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(MoviesAdapter.ViewHolder holder, int position) {
 
+        //holder.moviePoster.setImageResource();
     }
 
     @Override
@@ -48,10 +49,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView myTextView;
+        ImageView moviePoster;
 
         ViewHolder(View itemView) {
             super(itemView);
+            moviePoster = itemView.findViewById(R.id.movie_poster);
             itemView.setOnClickListener(this);
         }
 
