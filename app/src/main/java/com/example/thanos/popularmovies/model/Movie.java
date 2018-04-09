@@ -10,17 +10,19 @@ public class Movie {
     private String language;
     private String image;
     private String releaseDate;
+    private Double voteAverage;
     private boolean isAdult;
 
     public Movie(){
     }
 
-    public Movie(String movieTitle, String description, String language, String image, String releaseDate, boolean isAdult){
+    public Movie(String movieTitle, String description, String language, String image, String releaseDate, Double voteAverage, boolean isAdult){
         this.movieTitle = movieTitle;
         this.description = description;
         this.language = language;
         this.image = image;
         this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
         this.isAdult = isAdult;
     }
 
@@ -71,4 +73,13 @@ public class Movie {
     public void setAdult(boolean adult) {
         isAdult = adult;
     }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
 }

@@ -8,58 +8,78 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.thanos.popularmovies.model.Movie;
+import com.example.thanos.popularmovies.utilities.NetworkUtilities;
+import com.squareup.picasso.Picasso;
+
+import java.net.URL;
+import java.util.ArrayList;
+
 
 /**
  * Created by Thanos on 3/14/2018.
  */
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyMovieViewHolder> {
 
+    private ArrayList<Movie> data;
+    private MoviesAdapterOnClickHandler mClickHandler;
     private Context context;
-    private MoviesAdapterOnClickHandler clickHandler;
+
+    public MoviesAdapter(Context context, ArrayList<Movie> myData, MoviesAdapterOnClickHandler onClickHandler){
+        this.context = context;
+        this.data = myData;
+        this.mClickHandler = onClickHandler;
+    }
+
+
+
 
     public interface MoviesAdapterOnClickHandler{
-        void onClick(View v, int position);
+         void onClick(View v, int position);
     }
 
-    public MoviesAdapter(Context context, MoviesAdapterOnClickHandler clickHandler){
-        this.context = context;
-        this.clickHandler = clickHandler;
+
+
+    @Override
+    public MoviesAdapter.MyMovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, parent, false);
+
+        return new MyMovieViewHolder(itemView, mClickHandler);
     }
 
     @Override
-    public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(context).inflate(R.layout.recyclerview_item, parent, false);
-        view.setFocusable(true);
-
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(MoviesAdapter.ViewHolder holder, int position) {
-
-        //holder.moviePoster.setImageResource();
+    public void onBindViewHolder(MoviesAdapter.MyMovieViewHolder holder, int position) {
+        Movie movie = data.get(position);
+        URL moviePosterUrl = NetworkUtilities.buildImageUrl(movie.getImage());
+        String posterPath = moviePosterUrl.toString();
+        Picasso.with(context).load(posterPath).into(holder.moviePoster);
+        holder.movieTitle.setText(movie.getMovieTitle());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyMovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        ImageView moviePoster;
+        private MoviesAdapterOnClickHandler myClickHandler;
+        public ImageView moviePoster;
+        public TextView movieTitle;
 
-        ViewHolder(View itemView) {
+        public MyMovieViewHolder(View itemView, MoviesAdapterOnClickHandler clickHandler) {
             super(itemView);
             moviePoster = itemView.findViewById(R.id.movie_poster);
+            movieTitle = itemView.findViewById(R.id.movie_title);
+            myClickHandler = clickHandler;
             itemView.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View view) {
-
+        public void onClick(View v) {
+            myClickHandler.onClick(v, getAdapterPosition());
         }
     }
+
 }
