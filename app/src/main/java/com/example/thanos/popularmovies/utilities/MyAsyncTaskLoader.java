@@ -8,8 +8,8 @@ import java.net.URL;
 
 public class MyAsyncTaskLoader extends AsyncTaskLoader<String> {
 
-    NetworkUtilities.Mode mode;
-    String moviesData;
+    private NetworkUtilities.Mode mode;
+    private String moviesData;
 
     public MyAsyncTaskLoader(Context context, NetworkUtilities.Mode mode, String moviesData) {
         super(context);
@@ -33,8 +33,7 @@ public class MyAsyncTaskLoader extends AsyncTaskLoader<String> {
 
         URL moviesRequest = NetworkUtilities.buildUrl(mode);
         try{
-            String jsonTMDBresponse = NetworkUtilities.getResponseFromHttpUrl(moviesRequest);
-            return jsonTMDBresponse;
+            return NetworkUtilities.getResponseFromHttpUrl(moviesRequest);
         }catch (Exception e){
             e.printStackTrace();
             return null;

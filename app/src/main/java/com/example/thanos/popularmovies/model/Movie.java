@@ -1,10 +1,12 @@
 package com.example.thanos.popularmovies.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Thanos on 3/20/2018.
  */
 
-public class Movie {
+public class Movie implements Serializable {
     private String movieTitle;
     private String description;
     private String language;

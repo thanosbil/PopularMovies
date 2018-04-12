@@ -2,6 +2,7 @@ package com.example.thanos.popularmovies;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,10 +28,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.MoviesAdapterOnClickHandler, LoaderManager.LoaderCallbacks<String>{
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mAdapter;
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.MoviesAdapterOnClickHandler,
+        LoaderManager.LoaderCallbacks<String>{
+
+    private RecyclerView myRecyclerView;
+    private RecyclerView.LayoutManager myLayoutManager;
+    private RecyclerView.Adapter myAdapter;
     private ArrayList<Movie> movieData;
     private TextView noConnectionTextView;
     private LoaderManager myLoaderManager;
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = findViewById(R.id.rv_movies);
+        myRecyclerView = findViewById(R.id.rv_movies);
         noConnectionTextView = findViewById(R.id.tv_no_connection);
         loadingIndicator = findViewById(R.id.loading_indicator);
 
@@ -54,45 +57,36 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
         myLoaderManager = getLoaderManager();
 
-        if(checkConnectivity()){
-            mRecyclerView.setVisibility(View.VISIBLE);
+        if(NetworkUtilities.checkConnectivity(this)){
+            myLoaderManager.initLoader(1, null, this);
             noConnectionTextView.setVisibility(View.INVISIBLE);
         }else {
-            mRecyclerView.setVisibility(View.INVISIBLE);
             noConnectionTextView.setVisibility(View.VISIBLE);
-            noConnectionTextView.setText("No Internet Connection");
+            noConnectionTextView.setText(R.string.no_connection);
         }
 
-        myLoaderManager.initLoader(1, null, this);
 
     }
 
     @Override
     public void onClick(View v, int position) {
-        Toast.makeText(getApplicationContext(), "clicked item in position " + position, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra("serializedData", movieData.get(position));
+        startActivity(intent);
     }
 
-
-
-    private boolean checkConnectivity(){
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return networkInfo != null && networkInfo.isConnected();
-    }
 
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
         loadingIndicator.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        responseData = null;
+        myRecyclerView.setVisibility(View.INVISIBLE);
         return new MyAsyncTaskLoader(this, mode, responseData);
     }
 
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         loadingIndicator.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        myRecyclerView.setVisibility(View.VISIBLE);
         movieData = new ArrayList<>();
         try{
             JSONObject jsonData = new JSONObject(data);
@@ -115,11 +109,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             e.printStackTrace();
         }
 
-        mLayoutManager = new GridLayoutManager(this, 2);
-        mRecyclerView.setHasFixedSize(true);
-        mAdapter = new MoviesAdapter(this, movieData, this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        myLayoutManager = new GridLayoutManager(this, 2);
+        myRecyclerView.setHasFixedSize(true);
+        myAdapter = new MoviesAdapter(this, movieData, this);
+        myRecyclerView.setLayoutManager(myLayoutManager);
+        myRecyclerView.setAdapter(myAdapter);
     }
 
     @Override
@@ -136,17 +130,36 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_most_popular:
-                mode = NetworkUtilities.Mode.popular;
-                myLoaderManager.restartLoader(1, null, this);
-                return true;
-            case R.id.action_top_rated:
-                mode = NetworkUtilities.Mode.top_rated;
-                myLoaderManager.restartLoader(1, null, this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+
+        if (NetworkUtilities.checkConnectivity(this)) {
+
+            connectedActions();
+
+            switch (item.getItemId()){
+                case R.id.action_most_popular:
+                    mode = NetworkUtilities.Mode.popular;
+                    myLoaderManager.restartLoader(1, null, this);
+                    return true;
+                case R.id.action_top_rated:
+                    mode = NetworkUtilities.Mode.top_rated;
+                    myLoaderManager.restartLoader(1, null, this);
+                    return true;
+            }
+        }else
+            noConnectionActions();
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void connectedActions(){
+        myRecyclerView.setVisibility(View.VISIBLE);
+        noConnectionTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void noConnectionActions(){
+        noConnectionTextView.setText(R.string.check_connection);
+        noConnectionTextView.setVisibility(View.VISIBLE);
+        myRecyclerView.setVisibility(View.INVISIBLE);
     }
 }

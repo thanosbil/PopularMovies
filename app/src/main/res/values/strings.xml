@@ -2,4 +2,13 @@
     <string name="app_name">Popular Movies</string>
     <string name="main_menu_top_rated">Top rated</string>
     <string name="main_menu_most_popular">Most popular</string>
+    <string name="no_connection">No internet connection!</string>
+    <string name="check_connection">Check connection and try again!</string>
+
+    <string name="detail_movie_title">Title:</string>
+    <string name="detail_movie_synopsis">Synopsis:</string>
+    <string name="detail_movie_rating">Rating:</string>
+    <string name="detail_movie_adult">Is adult:</string>
+    <string name="detail_movie_release">Release date:</string>
+    <string name="detail_movie_language">Language:</string>
 </resources>

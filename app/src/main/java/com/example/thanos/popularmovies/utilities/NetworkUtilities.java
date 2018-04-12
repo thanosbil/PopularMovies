@@ -1,7 +1,9 @@
 package com.example.thanos.popularmovies.utilities;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -15,15 +17,24 @@ import java.util.Scanner;
 
 public class NetworkUtilities {
 
-    public enum Mode{ popular, top_rated }
+    public enum Mode{
+        popular,
+        top_rated
+    }
+
+    public enum ImageMode{
+        rv_item,
+        detail
+    }
 
     private static final String TMDB_API_URL = "http://api.themoviedb.org/3/movie";
     private static final String FOR_POPULAR = "popular";
     private static final String FOR_TOP_RATED = "top_rated";
     private static final String API_KEY_PARAM = "api_key";
-    private static final String API_KEY = "f1cef6cc743eeb511311fdb2985663f7";
+    private static final String API_KEY = "";
     private static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-    private static final String IMAGE_SIZE = "w185";
+    private static final String IMAGE_RV_ITEM = "w185";
+    private static final String IMAGE_DETAIL = "w342";
 
 
     public static URL buildUrl(Mode mode){
@@ -54,13 +65,24 @@ public class NetworkUtilities {
         return url;
     }
 
-    public static URL buildImageUrl(String imageRelativeUrl){
-        Uri buildUri;
+    public static URL buildImageUrl(String imageRelativeUrl, ImageMode mode){
+        Uri buildUri = null;
 
-        buildUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
-                .appendPath(IMAGE_SIZE)
-                .appendEncodedPath(imageRelativeUrl)
-                .build();
+        switch (mode){
+            case rv_item:
+                buildUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
+                        .appendPath(IMAGE_RV_ITEM)
+                        .appendEncodedPath(imageRelativeUrl)
+                        .build();
+                break;
+            case detail:
+                buildUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
+                        .appendPath(IMAGE_DETAIL)
+                        .appendEncodedPath(imageRelativeUrl)
+                        .build();
+                break;
+        }
+
 
         URL url = null;
 
@@ -91,4 +113,10 @@ public class NetworkUtilities {
         }
     }
 
+    public static boolean checkConnectivity(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnected();
+    }
 }
