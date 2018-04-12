@@ -2,7 +2,6 @@ package com.example.thanos.popularmovies.utilities;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.widget.ProgressBar;
 
 import java.net.URL;
 
@@ -11,10 +10,9 @@ public class MyAsyncTaskLoader extends AsyncTaskLoader<String> {
     private NetworkUtilities.Mode mode;
     private String moviesData;
 
-    public MyAsyncTaskLoader(Context context, NetworkUtilities.Mode mode, String moviesData) {
+    public MyAsyncTaskLoader(Context context, NetworkUtilities.Mode mode) {
         super(context);
         this.mode = mode;
-        this.moviesData = moviesData;
     }
 
 

@@ -1,11 +1,8 @@
 package com.example.thanos.popularmovies;
 
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.thanos.popularmovies.model.Movie;
 import com.example.thanos.popularmovies.utilities.MyAsyncTaskLoader;
@@ -39,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private LoaderManager myLoaderManager;
     private NetworkUtilities.Mode mode = NetworkUtilities.Mode.popular;
     private ProgressBar loadingIndicator;
-    private String responseData = null;
 
 
     @Override
@@ -50,10 +45,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         myRecyclerView = findViewById(R.id.rv_movies);
         noConnectionTextView = findViewById(R.id.tv_no_connection);
         loadingIndicator = findViewById(R.id.loading_indicator);
-
-
-
-
 
         myLoaderManager = getLoaderManager();
 
@@ -80,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     public Loader<String> onCreateLoader(int id, Bundle args) {
         loadingIndicator.setVisibility(View.VISIBLE);
         myRecyclerView.setVisibility(View.INVISIBLE);
-        return new MyAsyncTaskLoader(this, mode, responseData);
+        return new MyAsyncTaskLoader(this, mode);
     }
 
     @Override

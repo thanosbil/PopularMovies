@@ -13,13 +13,13 @@ import com.squareup.picasso.Picasso;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
-    TextView movieTitle;
-    TextView movieSynopsis;
-    TextView movieRating;
-    TextView movieIsAdult;
-    TextView movieReleaseDate;
-    TextView movieLanguage;
-    ImageView moviePoster;
+    private TextView movieTitle;
+    private TextView movieSynopsis;
+    private TextView movieRating;
+    private TextView movieIsAdult;
+    private TextView movieReleaseDate;
+    private TextView movieLanguage;
+    private ImageView moviePoster;
 
 
     @Override
