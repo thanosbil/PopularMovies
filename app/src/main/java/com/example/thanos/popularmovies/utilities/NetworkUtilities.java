@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+
+import com.example.thanos.popularmovies.BuildConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -31,7 +34,7 @@ public class NetworkUtilities {
     private static final String FOR_POPULAR = "popular";
     private static final String FOR_TOP_RATED = "top_rated";
     private static final String API_KEY_PARAM = "api_key";
-    private static final String API_KEY = "";
+    private static final String API_KEY = BuildConfig.THE_MOVIE_DB_API_KEY;
     private static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_RV_ITEM = "w185";
     private static final String IMAGE_DETAIL = "w342";

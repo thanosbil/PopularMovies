@@ -11,4 +11,5 @@
     <string name="detail_movie_adult">Is adult:</string>
     <string name="detail_movie_release">Release date:</string>
     <string name="detail_movie_language">Language:</string>
+    <string name="detail_button_favourites">Add to favourites</string>
 </resources>
