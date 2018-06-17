@@ -9,4 +9,8 @@
         android:id="@+id/action_most_popular"
         android:title="@string/main_menu_most_popular"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_favourites"
+        android:title="@string/main_menu_favourites"
+        app:showAsAction="never" />
 </menu>

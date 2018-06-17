@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.thanos.popularmovies.model.Movie;
+import com.example.thanos.popularmovies.utilities.DbUtilities;
 import com.example.thanos.popularmovies.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
@@ -34,12 +35,15 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView movieLanguage;
     private ImageView moviePoster;
     private Button addToFavourites;
+    private Movie movie;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
+        movie = new Movie();
 
         movieTitle = findViewById(R.id.tv_movie_title);
         movieSynopsis = findViewById(R.id.tv_synopsis);
@@ -52,7 +56,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent.getExtras() != null){
-            Movie movie = (Movie) getIntent().getSerializableExtra("serializedData");
+            movie = (Movie) getIntent().getSerializableExtra("serializedData");
 
             if(movie != null){
                 populateUI(movie);
@@ -85,50 +89,12 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void onAddToFavouritesClick(View v){
-
-        saveToInternalStorage(moviePoster.getDrawable(), movieTitle.toString());
+        DbUtilities.insertFavouriteMovie(movie, this, moviePoster.getDrawable());
+        finish();
     }
 
 
 
-    private String saveToInternalStorage(Drawable drawable, String posterFileName){
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-        Bitmap posterBitmap = bitmapDrawable.getBitmap();
-
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getDir("moviePosters", Context.MODE_PRIVATE);
-        File path = new File(directory, posterFileName);
-
-        FileOutputStream fileOutputStream = null;
-        try {
-            fileOutputStream = new FileOutputStream(path);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            posterBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fileOutputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return directory.getAbsolutePath();
-    }
-
-    private void loadImageFromStorage(String path, String posterFileName)
-    {
-
-        try {
-            File f=new File(path, posterFileName);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
 
 }

@@ -22,6 +22,10 @@
         <activity
             android:name=".MovieDetailActivity"
             android:parentActivityName=".MainActivity"/>
+        <provider
+            android:authorities="com.example.thanos.popularmovies"
+            android:name="com.example.thanos.popularmovies.data.MovieProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

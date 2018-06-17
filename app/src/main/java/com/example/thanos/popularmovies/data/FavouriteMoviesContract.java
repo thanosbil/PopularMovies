@@ -19,7 +19,7 @@ public class FavouriteMoviesContract {
         public static final String COLUMN_POSTER = "poster";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_LANGUAGE = "language";
-        public static final String COLUMN_REALEASED = "released";
+        public static final String COLUMN_RELEASED = "released";
         public static final String COLUMN_AVG = "average";
         public static final String COLUMN_ADULT = "adult";
 

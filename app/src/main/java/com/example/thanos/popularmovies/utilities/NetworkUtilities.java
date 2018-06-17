@@ -22,7 +22,8 @@ public class NetworkUtilities {
 
     public enum Mode{
         popular,
-        top_rated
+        top_rated,
+        favourites
     }
 
     public enum ImageMode{
