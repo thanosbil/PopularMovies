@@ -4,6 +4,7 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private ArrayList<Movie> movieData;
     private TextView noConnectionTextView;
     private LoaderManager myLoaderManager;
-    private NetworkUtilities.Mode mode = NetworkUtilities.Mode.popular;
+    private NetworkUtilities.Mode mode;
     private ProgressBar loadingIndicator;
 
 
@@ -48,8 +49,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         myRecyclerView = findViewById(R.id.rv_movies);
         noConnectionTextView = findViewById(R.id.tv_no_connection);
         loadingIndicator = findViewById(R.id.loading_indicator);
+        movieData = new ArrayList<>();
 
         myLoaderManager = getLoaderManager();
+        mode = NetworkUtilities.Mode.popular;
 
         if(NetworkUtilities.checkConnectivity(this)){
             myLoaderManager.initLoader(1, null, this);
@@ -87,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     public void onLoadFinished(Loader loader, Object data) {
         loadingIndicator.setVisibility(View.INVISIBLE);
         myRecyclerView.setVisibility(View.VISIBLE);
-
+        movieData.clear();
         switch (mode){
             case popular:
             case top_rated:
-                movieData = new ArrayList<>();
+
                 try{
                     String stringData = String.valueOf(data);
                     JSONObject jsonData = new JSONObject(stringData);
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
                         movieData.add(movie);
                     }
 
-                    myAdapter = new MoviesAdapter(this, movieData, this, mode);
+
 
                 }catch (JSONException e){
                     e.printStackTrace();
@@ -119,14 +122,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
                 break;
             case favourites:
                 Cursor cursorData = (Cursor)data;
-                //fillMovieArrayList(cursorData);
-                myAdapter = new MoviesAdapter(this, cursorData, this, mode);
-                myAdapter.swapCursor(cursorData);
+                fillMovieArrayList(cursorData);
+                //myAdapter = new MoviesAdapter(this, cursorData, this, mode);
+                //myAdapter.swapCursor(cursorData);
                 break;
 
         }
 
-
+        myAdapter = new MoviesAdapter(this, movieData, this, mode);
         myLayoutManager = new GridLayoutManager(this, 2);
         myRecyclerView.setHasFixedSize(true);
 
@@ -172,6 +175,17 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putSerializable("enum_key", mode);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void connectedActions(){

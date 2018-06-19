@@ -65,23 +65,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyMovieVie
     @Override
     public void onBindViewHolder(MoviesAdapter.MyMovieViewHolder holder, int position) {
         String posterPath;
+        Movie movie = data.get(position);
+
         switch (adapterMode){
             case popular:
             case top_rated:
-                Movie movie = data.get(position);
                 URL moviePosterUrl = NetworkUtilities.buildImageUrl(movie.getImage(), NetworkUtilities.ImageMode.rv_item);
                 posterPath = moviePosterUrl.toString();
                 Picasso.with(context).load(posterPath).into(holder.moviePoster);
                 holder.movieTitle.setText(movie.getMovieTitle());
                 break;
             case favourites:
-           /*     if(!cursor.move(position)){
-                    return;
-                }
-*/
-                cursor.moveToPosition(position);
-                String title = cursor.getString(cursor.getColumnIndex(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_TITLE));
-                posterPath = cursor.getString(cursor.getColumnIndex(FavouriteMoviesContract.FavouriteMovieEntry.COLUMN_POSTER));
+               // cursor.moveToPosition(position);
+                String title = movie.getMovieTitle();
+                posterPath = movie.getImage();
                 posterPath += "/" + title;
                 holder.movieTitle.setText(title);
                 Picasso.with(context).load(new File(posterPath)).into(holder.moviePoster);
@@ -109,10 +106,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyMovieVie
 
     @Override
     public int getItemCount() {
-        if(adapterMode == NetworkUtilities.Mode.popular || adapterMode == NetworkUtilities.Mode.top_rated)
-            return data.size();
-        else
-            return cursor.getCount();
+        return data.size();
     }
 
     public class MyMovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

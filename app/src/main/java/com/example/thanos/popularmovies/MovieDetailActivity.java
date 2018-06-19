@@ -45,7 +45,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         movie = new Movie();
 
-        movieTitle = findViewById(R.id.tv_movie_title);
         movieSynopsis = findViewById(R.id.tv_synopsis);
         movieRating = findViewById(R.id.tv_vote_average);
         movieIsAdult = findViewById(R.id.tv_adult);
@@ -77,7 +76,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         setTitle(movie.getMovieTitle());
 
-        movieTitle.setText(movie.getMovieTitle());
         movieSynopsis.setText(movie.getDescription());
         movieRating.setText(String.valueOf(movie.getVoteAverage()));
         movieIsAdult.setText(String.valueOf(movie.isAdult()));
@@ -90,7 +88,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     public void onAddToFavouritesClick(View v){
         DbUtilities.insertFavouriteMovie(movie, this, moviePoster.getDrawable());
-        finish();
     }
 
 
